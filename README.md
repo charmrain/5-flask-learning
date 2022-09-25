@@ -1,2 +1,2 @@
 # 5-flask-learning
-# 5-flask-learning
+* this project is about how i start to learn Flask
