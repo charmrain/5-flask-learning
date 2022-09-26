@@ -1,6 +1,9 @@
-from flask import Flask, redirect, request, jsonify
+from flask import Flask, redirect, request, jsonify, session
 
 app = Flask(__name__)
+
+# when utilise the session, the secret_key is a must to setup beforehand
+app.secret_key = 'xxnnqqttlllpoc'
 
 @app.route("/")
 def first_script():
@@ -36,6 +39,52 @@ def json_post():
         return jsonify(msg = "lacks of parameter")
 
     return jsonify(name=get_name, age=get_age)
+
+
+@app.route("/try/login", methods=['POST'])
+def login():
+    """
+    username johndoe
+    password abc123
+    :return:
+    """
+    get_data = request.get_json()
+    username = get_data.get("username")
+    password = get_data.get("password")
+
+    if not all([username, password]):
+        return jsonify(msg = "username or password is incomplete")
+    
+    if username == 'johndoe' and password == 'abc123':
+        # if verification is passed, the status of login will be saved in the session
+        session["username"] = username
+        return jsonify( msg = "login successfully")
+    else:
+        return jsonify( msg = "wrong user or password")
+
+
+    pass
+
+
+@app.route("/try/logout", methods=['GET'])
+def logout():
+    session.clear()
+    return jsonify(msg = "sucessfully logout")
+    pass
+
+@app.route("/session", methods=['GET'])
+def check_session():
+    """
+    this function aims to check if the user is login in the session
+    """
+    username = session.get("username")
+    if username is not None:
+        return jsonify(username = username)
+    else:
+        return jsonify(msg = "something went wrong")
+
+
+    pass
 
 app.run(host='0.0.0.0', port='7777')
 
