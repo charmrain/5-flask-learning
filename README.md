@@ -11,3 +11,7 @@
 **request**
 
 **jsonify** usually used to return a json format result
+
+
+* pip freeze > requirement.txt
+* above is the quickest way to generate a list of requirement library when using a virtue envirenment
